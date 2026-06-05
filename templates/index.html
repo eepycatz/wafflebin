@@ -1,0 +1,96 @@
+<head>
+    <meta
+        property="og:description"
+        content="miaw.cc - a lightweight social pastebin"
+    />
+    <meta
+        property="og:image"
+        content="{{ url_for('static', filename='favicon.webp') }}"
+    />
+</head>
+
+<div id="content">
+    {% extends "layout.html" %} {% block content %}
+    <div class="container large">
+        <form id="pasteForm" method="post">
+            <textarea
+                name="content"
+                id="content"
+                placeholder="enter your text here..."
+                required
+                rows="30"
+                cols="80"
+            ></textarea
+            ><br />
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="new-paste-options">
+                <input
+                    type="text"
+                    name="custom_id"
+                    placeholder="custom url here!"
+                />
+                {% if current_user.is_authenticated %}
+                <button class="btn" type="submit">create</button>
+            </div>
+        </form>
+        {% else %}
+        <p>
+            you need to <a href="{{ url_for('user.login') }}">log in</a> to
+            create a paste!
+        </p>
+        {% endif %}
+    </div>
+</div>
+<div
+    id="popup"
+    style="
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+    "
+>
+    <p id="popup-message"></p>
+    <button class="btn" onclick="hidePopup()">close</button>
+</div>
+
+<script>
+    function showPopup(message) {
+        document.getElementById("popup-message").innerText = message;
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("content").classList.add("blur");
+    }
+
+    function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("content").classList.remove("blur");
+    }
+
+    document
+        .getElementById("pasteForm")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            fetch("/", {
+                method: "POST",
+                body: new FormData(this),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        showPopup(data.error);
+                    }
+                })
+                .catch((error) => {
+                    showPopup("an unexpected error occurred!");
+                    console.error("error:", error);
+                });
+        });
+</script>
+
+{% endblock %}

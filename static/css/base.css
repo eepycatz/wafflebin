@@ -1,0 +1,29 @@
+.large {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.medium {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.flex {
+    display: flex;
+}
+
+.gap_3 {
+    gap: 3px;
+}
+
+.space {
+    justify-content: space-between;
+}
+
+.align {
+    align-items: center;
+}
+
+.txt {
+    text-align: center;
+}

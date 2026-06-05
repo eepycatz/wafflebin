@@ -25,7 +25,7 @@ from routes.user import bp as user_bp
 
 app = Flask(__name__)
 SECRET = os.environ.get("SECRET_KEY")
-app.secret_key = SECRET
+app.secret_key = "super-secret-key-lala"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pastes.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = "static/profile_pics"

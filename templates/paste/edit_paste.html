@@ -1,0 +1,88 @@
+{% extends "layout.html" %} {% block content %}
+<head>
+    <title>
+        {% block title %} {% if paste.page_title %} {{ paste.page_title }} {%
+        else %} {{ paste.id }} {% endif %} {% endblock %}
+    </title>
+    {% if paste.favicon_url %}
+    <link
+        rel="icon"
+        href="{{ paste.favicon_url or url_for('static', filename='favicon.ico') }}"
+    />
+    {% endif %}
+</head>
+<div class="container large">
+    <form method="POST" action="{{ url_for('paste.edit_paste', paste_id=paste.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="content">content</label><br />
+        <textarea
+            id="content"
+            name="content"
+            placeholder="your awesome code!"
+            rows="20"
+            cols="80"
+            required>{{ paste.content }}</textarea>
+        <div class="meta">
+            <div class="meta-content">
+                <input
+                    type="text"
+                    id="page_title"
+                    name="page_title"
+                    value="{{ paste.page_title }}"
+                    placeholder="page title here!"
+                />
+                <input
+                    type="text"
+                    id="meta_image"
+                    name="meta_image"
+                    value="{{ paste.meta_image }}"
+                    placeholder="meta image url here!"
+                />
+                <input
+                    type="text"
+                    id="theme_color"
+                    name="theme_color"
+                    value="{{ paste.theme_color }}"
+                    placeholder="meta desc theme color here!"
+                />
+            </div>
+            <div class="meta-content">
+                <input
+                    type="text"
+                    id="favicon_url"
+                    name="favicon_url"
+                    value="{{ paste.favicon_url }}"
+                    placeholder="favicon url here!"
+                />
+                <textarea
+                    id="meta_description"
+                    name="meta_description"
+                    value="{{ paste.meta_description }}"
+                    placeholder="meta description here!"
+                >
+                    {{ paste.meta_description }}</textarea
+                >
+            </div>
+        </div>
+        <div class="flex space">
+        <button type="submit">save changes</button>
+    </form>
+    <div class="flex gap_3 align">
+        <form
+            method="POST"
+            action="{{ url_for('paste.delete_paste', paste_id=paste.id) }}"
+            onsubmit="
+                return confirm('are you sure you want to delete this paste?');
+            "
+        >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-danger" type="submit">delete paste</button>
+        </form>
+        <div>
+            <button href="{{ url_for('paste.view_paste', paste_id=paste.id) }}"
+            >cancel</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

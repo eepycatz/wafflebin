@@ -1,0 +1,9 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container large">
+    <p>CONGRATULATION INVITE CODE ACHIEVED:</p>
+    <pre>{{ code }}</pre>
+    <a href="{{ url_for('admin.generate_invite') }}"
+        >get another (greedy fuck)</a
+    >
+</div>
+{% endblock %}

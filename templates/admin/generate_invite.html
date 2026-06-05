@@ -1,0 +1,9 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container large">
+    <p>get your invite codes or check the admin panel idiot</p>
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button class="btn" type="submit">generate invite code</button>
+    </form>
+</div>
+{% endblock %}

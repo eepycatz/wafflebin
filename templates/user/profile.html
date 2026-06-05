@@ -1,0 +1,86 @@
+{% extends "layout.html" %} {% block content %}
+
+<!doctype html>
+<html>
+    <head>
+        <title>
+            {% block title %} {{ user.username }}'s profile {% endblock %}
+        </title>
+        {% if user.profile_picture %}
+        <meta
+            property="og:image"
+            content="{{ url_for('static', filename='profile_pics/' + user.profile_picture) }}"
+        />
+        {% else %}
+        <meta
+            property="og:image"
+            content="{{ url_for('static', filename='profile_pics/default_pfp.png') }}"
+        />
+        {% endif %}
+        <meta property="og:title" content="{{ user.username }}'s profile" />
+        <meta property="og:description" content="{{ user.bio }}" />
+        {% if user.custom_css %}
+        <style>
+            {{ user.custom_css|safe }}
+        </style>
+        {% endif %}
+    </head>
+    <body>
+        <div class="container medium">
+            <div id="profile-flex">
+                <div
+                    id="username"
+                    style="display: flex; align-items: center; gap: 15px"
+                >
+                    <h2 id="name">
+                        {% if current_user.username == user.username %} your {%
+                        else %} {{ user.username }}'s {% endif %} profile
+                    </h2>
+                </div>
+                {% if user.profile_picture %}
+                <img
+                    src="{{ url_for('static', filename='profile_pics/' + user.profile_picture) }}"
+                    alt="{{ user.username }}'s profile picture"
+                    id="pfp"
+                />
+                {% else %}
+                <img
+                    src="{{ url_for('static', filename='default_pfp.webp') }}"
+                    alt="{{ user.username }}'s profile picture"
+                    id="pfp"
+                />
+                {% endif %}
+                <div class="badges-container">
+                    {% for badge in user.badges %}
+                    <div class="badge-containment">
+                        {% if badge.icon_url %}
+                        <img
+                            src="{{ badge.icon_url }}"
+                            title="{{ badge.name }}"
+                            width="24"
+                            height="24"
+                        />
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="profile-flex-two">
+                    <div class="bio">
+                        {% if user.bio %}{{ sanitize_content(user.bio) | safe }}
+                        {% else %} no bio set! {% endif %}
+                    </div>
+                </div>
+            </div>
+            <br />
+            {% if current_user.username == user.username %}
+            <div style="display: flex; justify-content: flex-end">
+                <a
+                    href="{{ url_for('user.edit_profile', username=user.username) }}"
+                >
+                    <button class="btn">edit profile</button></a
+                >
+            </div>
+            {% endif %} {% endblock %}
+        </div>
+    </body>
+</html>
