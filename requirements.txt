@@ -13,3 +13,4 @@ MarkupSafe
 click
 colorama
 bleach
+tinycss2
