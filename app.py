@@ -103,5 +103,10 @@ def nice_date_filter(value):
     return dt.strftime("%Y-%m-%d %H:%M UTC")
 
 
+import os
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
